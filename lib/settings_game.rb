@@ -1,6 +1,7 @@
 module SettingsGame
   SLEEP_INTERVAL = 0.5
   WAITING_INPUT = 0.1
+  TIMING_BLOKING = 0.4
   
 
   FIELD_WIDTH = 12
