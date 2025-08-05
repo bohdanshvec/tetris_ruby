@@ -1,6 +1,8 @@
 module GetPressedKey
   include SettingsGame
-
+  # Данные коментарии оставлены в учебных целях
+  
+  
   # получение нажатой клавиши поворота
   # def get_pressed_key
   #   input = nil

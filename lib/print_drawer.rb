@@ -9,6 +9,13 @@ module PrintDrawer
     @arr_field.each { |line| puts line }
   end
 
+  def print_and_wait(time)
+    @arr_field = field_and_figure
+    system "clear"
+    print_field
+    sleep(time)
+  end
+
   private
 
   def field
