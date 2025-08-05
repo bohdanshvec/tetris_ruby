@@ -26,7 +26,7 @@ module CheckBlock
   end
 
   def figure_fell?(figure)
-    figure.any? { |coord| (coord[:y] == (FIELD_HEIGHT_GAMING - 1)) || intersects_with_down?(coord) }
+    figure.any? { |coord| (coord[:y] == MAX_Y) || intersects_with_down?(coord) }
   end
 
   def change_position_figure_left_right_down_twist
@@ -52,10 +52,13 @@ module CheckBlock
     return if rows_to_clear.empty?
 
     # 2. Удалить заполненные строки
-    @arr_down.reject! { |coord| rows_to_clear.include?(coord[:y]) }
+    # @arr_down.reject! { |coord| rows_to_clear.include?(coord[:y]) }
+
+    # Пытаюсь добавить анимацию (постепенное удалание элементов)
+    animate_clear(rows_to_clear)
 
     # 3. Сдвинуть оставшиеся блоки вниз (если их y < очищенного)
-    rows_to_clear.sort.each do |cleared_y|
+    rows_to_clear.each do |cleared_y|
       @arr_down.each do |coord|
         if coord[:y] < cleared_y
           coord[:y] += 1
@@ -66,12 +69,40 @@ module CheckBlock
 
   private
 
+  def animate_clear(rows_to_clear)
+    rows_to_clear.each do |y|
+      # Найти все координаты на этой строке
+      line_coords = @arr_down.select { |coord| coord[:y] == y }
+
+      # Удалять по одному с паузой (для анимации)
+      line_coords.sort_by { |coord| coord[:x] }.each do |coord|
+        @arr_down.delete(coord)
+        @arr_field = field_and_figure
+        system "clear"
+        print_field  # функция отрисовки поля
+        sleep(0.05)
+      end
+    end
+  end
+
   def move_left
     try_move(dx: -1, dy: 0)
+    @arr_field = field_and_figure
+    system "clear"
+    print_field
+    sleep(0.3)
+    @key = get_pressed_key_nonblocking
+    move_left if @key == "\e[D" 
   end
 
   def move_right
     try_move(dx: 1, dy: 0)
+    @arr_field = field_and_figure
+    system "clear"
+    print_field
+    sleep(0.3)
+    @key = get_pressed_key_nonblocking
+    move_right if @key == "\e[C"
   end
 
   def drop_down

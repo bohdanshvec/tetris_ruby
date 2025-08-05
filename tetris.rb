@@ -2,7 +2,6 @@
   require_relative "lib/settings_game"
   require_relative "lib/print_drawer"
   require_relative "lib/figures"
-  # require_relative "lib/position_figure"
   require_relative "lib/get_pressed_key"
   require_relative "lib/check_block"
 
@@ -11,7 +10,6 @@ class Tetris
   include GetPressedKey
   include SettingsGame
   include Figures
-  # include PositionFigure
   include CheckBlock
 
   def initialize
@@ -24,7 +22,6 @@ class Tetris
 def run
   loop do
 
-    @arr_field = field_and_figure
 
     print_and_wait
 
@@ -49,6 +46,7 @@ end
   private
 
   def print_and_wait
+    @arr_field = field_and_figure
     system "clear"
     print_field
     sleep(SLEEP_INTERVAL)
